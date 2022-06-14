@@ -273,3 +273,11 @@ Following similar steps used during initialization lets run driftcl scan to dete
 
 ## Limitations
 For known limitation of driftctl please refer [this](https://docs.driftctl.com/0.17.0/limitations/) page.
+
+## Security
+
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+## License
+
+This library is licensed under the MIT-0 License. See the LICENSE file.
