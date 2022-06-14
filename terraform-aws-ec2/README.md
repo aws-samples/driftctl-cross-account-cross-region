@@ -1,5 +1,5 @@
 # terraform-aws-ec2
-This module creates a t2.micro EC2 instance in default VPC, using Amazon Linux AMI.
+This module creates a t2.micro Amazon Elastic Compute Cloud (Amazon EC2) instance in default Amazon Virtual Private Cloud (Amazon VPC), using Amazon Linux AMI.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
