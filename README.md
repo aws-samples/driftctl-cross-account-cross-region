@@ -71,7 +71,7 @@ Driftctl is a utility to detect drifts for the resources managed by Terraform as
   ```
 - Clone this git repository, using below command.
   ```shell
-  git clone -b driftctl-local https://gitlab.aws.dev/moizshar/cacr-driftctl.git && cd cacr-driftctl
+  git clone https://github.com/aws-samples/driftctl-cross-account-cross-region.git && cd driftctl-cross-account-cross-region
   ```
   > As part of this repository, terraform module to create an Amazon EC2 instance (instance type : t2.micro) in default Amazon VPC (i.e. `terraform-aws-ec2`) is located under branch `terraform-module`. 
   Using this module, terraform configuration located under sub-folders of folder named terraform will create ec2 instance in default VPC in `us-east-1` and `us-west-1` AWS regions of `Account A`, and `eu-west-1` and `us-west-1` AWS Regions of `Account B`.
