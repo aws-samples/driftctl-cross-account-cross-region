@@ -142,11 +142,11 @@ Driftctl is a utility to detect drifts for the resources managed by Terraform as
   Alternatively you can traverse to folders holding terraform configuration (e.g. terraform/account-a/us-east-1) and validate the drift results from driftctl-result.html file.
   If you wish to merge driftctl scan output from multiple folder, please use the python script with this repository, this python script by default searches for all driftctl-result.json file(s) from current location and generates a tabular output. 
   ```shell
-  python3 driftctl-result.py
+  python3 driftctl_result.py
   ```
-  > Python script `driftctl-result.py`, by default scans all subdirectories and looks for driftctl-result.json file and combines details from these files and produces a combined summary and detailed output in tabular format. 
+  > Python script `driftctl_result.py`, by default scans all subdirectories and looks for driftctl-result.json file and combines details from these files and produces a combined summary and detailed output in tabular format. 
   > In addition, the script executes `terraform output` command at the location where driftctl-result.json is found, and extracts `resource_region` and `resource_account_id` output values to populate region and account id details in detailed output.
-  > Use python3 `driftctl-result.py -h ` to view all available options
+  > Use python3 `driftctl_result.py -h ` to view all available options
 
 ### Add existing infrastructure on AWS Account to .driftignore (Optional)
 Many users/enterprises do not have the goal of reaching a 100% IAC coverage with their infrastructure. And for them, driftctl can be annoying to continuously deliver drift notifications on resources they don't care. For this use case, there's a solution.
@@ -254,9 +254,9 @@ Following similar steps used during initialization lets run driftcl scan to dete
 - Combine all detected drifts with python script, run below command.
   ```shell
     # For summary.
-    python3 driftctl-result.py 
+    python3 driftctl_result.py 
     # For detailed output.
-    python3 driftctl-result.py --detailed
+    python3 driftctl_result.py --detailed
   ```
 ## Cleanup
 - Run below commands to destroy AWS resources created by terraform configuration.
