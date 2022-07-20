@@ -25,6 +25,7 @@ import sys
 import glob
 import csv
 from enum import Enum
+from typing import List
 from tabulate import tabulate
 
 # Preserve white space while printing tabular view
@@ -32,16 +33,25 @@ tabulate.PRESERVE_WHITESPACE = True
 
 
 class DriftctlOutputMode(Enum):
+    """
+    ENUM for output mode
+    """
     STDOUT = 1
     FILE = 2
 
 
 class DriftctlOutputFormat(Enum):
+    """
+    ENUM for output format
+    """
     TABLE = 1
     CSV = 2
 
 
 class DriftctlResourceType(Enum):
+    """
+    ENUM for driftctl json resource types
+    """
     MANAGED = 1
     UNMANAGED = 2
     MISSING = 3
@@ -49,6 +59,10 @@ class DriftctlResourceType(Enum):
 
 
 class DriftctlResourceMin:
+    """
+    Drifctl object created after reading driftctl output json
+    """
+
     def __init__(self, **kwargs):
         self.id: str = kwargs.get('id')
         self.type: str = kwargs.get('type')
@@ -68,7 +82,11 @@ class DriftctlResourceMin:
 
 
 class DriftctlOutput:
-    def __init__(self, **kwargs):
+    """
+    Driftctl output combining all results retrieved as per command line input
+    """
+
+    def __init__(self):
         self.differences = {}
         self.managed = {}
         self.missing = {}
@@ -76,7 +94,6 @@ class DriftctlOutput:
 
     def __add_resource(self, resource_type: DriftctlResourceType, resource: DriftctlResourceMin):
         """
-
         Check and add driftctl scan output resource to either managed, missing, unmanaged or difference cache,
         based on resource_type and append source to existing resource.
 
@@ -116,15 +133,35 @@ class DriftctlOutput:
                 self.differences[hash_key] = resource
 
     def add_unmanaged_resource(self, resource: DriftctlResourceMin):
+        """
+        Add unmanaged resource to respective object dictionary
+        :param resource: DriftctlResourceMin
+        :return:
+        """
         self.__add_resource(DriftctlResourceType.UNMANAGED, resource)
 
     def add_managed_resource(self, resource: DriftctlResourceMin):
+        """
+        Add managed resource to respective object dictionary
+        :param resource: DriftctlResourceMin
+        :return:
+        """
         self.__add_resource(DriftctlResourceType.MANAGED, resource)
 
     def add_missing_resource(self, resource: DriftctlResourceMin):
+        """
+        Add missing resource to respective object dictionary
+        :param resource: DriftctlResourceMin
+        :return:
+        """
         self.__add_resource(DriftctlResourceType.MISSING, resource)
 
     def add_changed_resource(self, resource: DriftctlResourceMin):
+        """
+        Add changed resource to respective object dictionary
+        :param resource: DriftctlResourceMin
+        :return:
+        """
         self.__add_resource(DriftctlResourceType.DIFF, resource)
 
     def get_summary(self):
@@ -140,15 +177,46 @@ class DriftctlOutput:
             total_changed=len(self.differences)
         )
 
+    def __eq__(self, other):
+        if not isinstance(other, DriftctlOutput):
+            return False
+        return self.differences == other.differences and self.missing == other.missing \
+               and self.unmanaged == other.unmanaged and self.managed == other.managed
+
 
 class DriftctlSummary:
+    """
+    Class for holding state for Driftctl scanned resources summary.
+    """
+
     def __init__(self, **kwargs):
-        self.total_changed = kwargs.get('total_changed')
-        self.total_unmanaged = kwargs.get('total_unmanaged')
-        self.total_missing = kwargs.get('total_missing')
-        self.total_managed = kwargs.get('total_managed')
+        self.total_changed = kwargs.get('total_changed', 0)
+        self.total_unmanaged = kwargs.get('total_unmanaged', 0)
+        self.total_missing = kwargs.get('total_missing', 0)
+        self.total_managed = kwargs.get('total_managed', 0)
         self.total_resources = self.total_managed + self.total_unmanaged + self.total_missing
         self.coverage = int(self.total_managed * 100 / self.total_resources) if self.total_resources > 0 else 0
+
+    def get_total_resources_count(self):
+        """
+        Get count of total changed resources
+        :return:
+        """
+        return self.total_resources
+
+    def get_coverage_stats(self):
+        """
+        Get coverage statistics for driftctl run
+        :return:
+        """
+        return self.coverage
+
+    def __eq__(self, other):
+        if not isinstance(other, DriftctlSummary):
+            return False
+        return self.total_changed == other.total_changed and self.total_managed == other.total_managed and \
+               self.coverage == other.coverage and self.total_resources == other.total_resources and \
+               self.total_missing == other.total_missing and self.total_unmanaged == other.total_unmanaged
 
 
 def get_driftctl_resource(resource: dict, region: str = "", account_id: str = "", source_file_name: str = "",
@@ -165,14 +233,14 @@ def get_driftctl_resource(resource: dict, region: str = "", account_id: str = ""
     :return: DriftctlResourceMin
 
     """
-    _id = resource.get('id') if not wrap_text else "\n".join(textwrap.wrap(resource.get('id')))
-    _type = resource.get('type') if not wrap_text else "\n".join(textwrap.wrap(resource.get('type')))
+    _id = resource.get('id', "") if not wrap_text else "\n".join(textwrap.wrap(resource.get('id', "")))
+    _type = resource.get('type', "") if not wrap_text else "\n".join(textwrap.wrap(resource.get('type', "")))
     _change_log = resource.get('change_log', "")
     return DriftctlResourceMin(id=_id, type=_type, source=source_file_name, change_log=_change_log,
                                region=region, account_id=account_id)
 
 
-def get_driftctl_combined_output(driftctl_output_json_dicts: [dict] = [], wrap_text: bool = False):
+def get_driftctl_combined_output(driftctl_output_json_dicts=None, wrap_text: bool = False):
     """
 
     Analyse and merge, all Driftctl scan output json files dict(s) and produce a combined output.
@@ -181,31 +249,31 @@ def get_driftctl_combined_output(driftctl_output_json_dicts: [dict] = [], wrap_t
     :param wrap_text: if True, details for resource under driftctl_output_json_dicts are wrapped to be displayed.
     :return: DriftctlOutput
     """
+    if driftctl_output_json_dicts is None:
+        driftctl_output_json_dicts = []
     driftctl_output = DriftctlOutput()
-    for op in driftctl_output_json_dicts:
-        source_file_name = op.get('source_file_name')
-        region = op.get('resource_region')
-        account_id = op.get('resource_account_id')
-        unmanaged = op.get('unmanaged')
-        missing = op.get('missing')
-        differences = op.get('differences')
-        managed = op.get('managed')
-        if unmanaged is not None:
-            for unmanaged_resource in unmanaged:
+    for drift_output in driftctl_output_json_dicts:
+        source_file_name = drift_output.get('source_file_name')
+        region = drift_output.get('resource_region')
+        account_id = drift_output.get('resource_account_id')
+
+        if drift_output.get('unmanaged') is not None:
+            for unmanaged_resource in drift_output.get('unmanaged'):
                 driftctl_output.add_unmanaged_resource(
                     get_driftctl_resource(unmanaged_resource, region, account_id, source_file_name, wrap_text))
-        if missing is not None:
-            for missing_resource in missing:
+        if drift_output.get('missing') is not None:
+            for missing_resource in drift_output.get('missing'):
                 driftctl_output.add_missing_resource(
                     get_driftctl_resource(missing_resource, region, account_id, source_file_name, wrap_text))
-        if differences is not None:
-            for difference in differences:
+
+        if drift_output.get('differences') is not None:
+            for difference in drift_output.get('differences'):
                 res = difference.get('res')
                 res["change_log"] = difference.get('changelog')
                 driftctl_output.add_changed_resource(get_driftctl_resource(res, region, account_id,
                                                                            source_file_name, wrap_text))
-        if managed is not None:
-            for managed_resource in managed:
+        if drift_output.get('managed') is not None:
+            for managed_resource in drift_output.get('managed'):
                 driftctl_output.add_managed_resource(
                     get_driftctl_resource(managed_resource, region, account_id, source_file_name, wrap_text))
     return driftctl_output
@@ -219,16 +287,15 @@ def print_data_table(writer, data=None, headers=None):
     :param headers: Headers for the table
     """
     if headers is None:
-        headers = []
+        headers = ["No Data"]
     if data is None:
-        data = []
+        data = [["No Data"]]
     print(tabulate(data, headers=headers, tablefmt="fancy_grid", colalign=("right",)), file=writer)
     writer.flush()
 
 
 def print_data_csv(writer, data=None, headers=None):
     """
-
     Print data on screen in CSV format, along with headers.
     :param writer: IO Handler for writing output.
     :param data:List of list of data to be added to table.
@@ -264,7 +331,7 @@ def print_driftctl_op(output: DriftctlOutput, print_details: bool = False,
     summary_table = []
     summary_headers = ["Summary", "count"]
     summary = output.get_summary()
-    summary_table.append(["Coverage", "{}%".format(summary.coverage)])
+    summary_table.append(["Coverage", f"{summary.coverage}%"])
     summary_table.append(["Found resource(s)", summary.total_resources])
     summary_table.append(["Resource(s) managed by Terraform", summary.total_managed])
     summary_table.append(["Resource(s) found in a Terraform state but missing on the cloud provider",
@@ -276,11 +343,13 @@ def print_driftctl_op(output: DriftctlOutput, print_details: bool = False,
     try:
         if output_file_mode == DriftctlOutputMode.FILE:
             if output_file_format == DriftctlOutputFormat.CSV:
-                writer = open(output_file_name, "w") if output_file_name.lower().endswith(".csv") else open(output_file_name+".csv", "w")
+                if not output_file_name.lower().endswith(".csv"):
+                    output_file_name = f"{output_file_name}.csv"
+                writer = open(output_file_name, "w", encoding="utf-8")
             elif output_file_format == DriftctlOutputFormat.TABLE:
-                writer = open(output_file_name, "w")
+                writer = open(output_file_name, "w", encoding="utf-8")
     except FileNotFoundError:
-        print("Error: Cannot open file {} to write data".format(output_file_name), file=sys.stderr)
+        print(f"Error: Cannot open file {output_file_name} to write data", file=sys.stderr)
         print("Warn: Output will be written to STDOUT instead", file=sys.stderr)
     if output_file_format == DriftctlOutputFormat.TABLE:
         print_data_table(writer=writer, data=summary_table, headers=summary_headers)
@@ -295,7 +364,7 @@ def print_driftctl_op(output: DriftctlOutput, print_details: bool = False,
             "-------------------------------------------------------------------\n", file=writer)
         detail_headers = ["Category", "Resource Id", "Resource Type", "Region", "Account Id", "Source"]
         detail_table = []
-        for k, missing in output.missing.items():
+        for missing in output.missing.values():
             _id = missing.id
             _source = missing.source
             if output_file_format == DriftctlOutputFormat.TABLE:
@@ -303,14 +372,14 @@ def print_driftctl_op(output: DriftctlOutput, print_details: bool = False,
                 _source = "\n".join(textwrap.wrap(_source, width=40))
             detail_table.append(["Missing", _id, missing.type, missing.region, missing.account_id, _source])
 
-        for k, unmanaged in output.unmanaged.items():
+        for unmanaged in output.unmanaged.values():
             _id = unmanaged.id
             _source = unmanaged.source
             if output_file_format == DriftctlOutputFormat.TABLE:
                 _id = "\n".join(textwrap.wrap(_id))
                 _source = "\n".join(textwrap.wrap(_source, width=40))
             detail_table.append(["Unmanaged", _id, unmanaged.type, unmanaged.region, unmanaged.account_id, _source])
-        for k, diff in output.differences.items():
+        for diff in output.differences.values():
             _id = diff.id
             _source = diff.source
             if output_file_format == DriftctlOutputFormat.TABLE:
@@ -326,6 +395,11 @@ def print_driftctl_op(output: DriftctlOutput, print_details: bool = False,
 
 
 def parse_arguments(_args):
+    """
+    Parse commandline arguments
+    :param _args:
+    :return:
+    """
     parser = argparse.ArgumentParser(description="Scan driftctl scan json output and combine results.")
     parser.add_argument("-i", "--input-dir", type=str, dest="root_dir",
                         default=os.path.dirname(os.path.abspath(__file__)))
@@ -360,7 +434,7 @@ def get_terraform_output(dir_name: str):
         output = subprocess.check_output("terraform -chdir=\"" + dir_name + "\" output -json", shell=True)
         return json.loads(output)
     except Exception:
-        print("WARN : Not able to get details from terraform output for directory {}".format(dir_name), file=sys.stderr)
+        print(f"WARN : Not able to get details from terraform output for directory {dir_name}", file=sys.stderr)
         return {}
 
 
@@ -379,7 +453,7 @@ def get_account_details_from_terraform_output(dir_name: str):
     return str(resource_region), str(resource_account_id)
 
 
-def validate_and_load_driftctl_scan_json(files: []):
+def validate_and_load_driftctl_scan_json(files: List[str]):
     """
 
     Reads list of Driftctl scan output json files, converts it to dict, and add details of
@@ -394,24 +468,24 @@ def validate_and_load_driftctl_scan_json(files: []):
     for in_file in files:
         try:
             resource_region, resource_account_id = get_account_details_from_terraform_output(os.path.dirname(in_file))
-            f = open(in_file, "r")
-            _my_dict = json.load(f)
-            file_name = "." + in_file[len(os.getcwd()):] if in_file.find(os.getcwd()) == 0 else in_file
-            _my_dict["source_file_name"] = file_name
-            _my_dict["resource_region"] = resource_region
-            _my_dict["resource_account_id"] = resource_account_id
-            drift_scan_dicts.append(_my_dict)
-            f.close()
+            with open(in_file, "r", encoding="utf-8") as infile:
+                _my_dict = json.load(infile)
+                file_name = "." + in_file[len(os.getcwd()):] if in_file.find(os.getcwd()) == 0 else in_file
+                _my_dict["source_file_name"] = file_name
+                _my_dict["resource_region"] = resource_region
+                _my_dict["resource_account_id"] = resource_account_id
+                drift_scan_dicts.append(_my_dict)
+                infile.close()
         except Exception:
-            print(
-                "Warning : Not able to read driftctl scan output json file {}, data for this file will be ignored.".format(
-                    in_file), file=sys.stderr)
+            print(f"Warning : Not able to read driftctl scan output json file {in_file}, "
+                  f"data for this file will be ignored.", file=sys.stderr)
     return drift_scan_dicts
 
 
 if __name__ == '__main__':
     args = parse_arguments(sys.argv[1:])
-    op_format = DriftctlOutputFormat.CSV if args.output_format == "CSV" else DriftctlOutputFormat.TABLE if args.output_format == "TABLE" else ""
+    op_format: DriftctlOutputFormat = DriftctlOutputFormat.CSV if args.output_format == "CSV" \
+        else DriftctlOutputFormat.TABLE
     print_driftctl_op(
         output=get_driftctl_combined_output(
             driftctl_output_json_dicts=validate_and_load_driftctl_scan_json(find_files(args.root_dir, args.file_name)),
