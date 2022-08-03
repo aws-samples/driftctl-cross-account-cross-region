@@ -18,7 +18,8 @@
 
 import json
 import argparse
-import subprocess
+# Disabling bandit B404 check on below line as subprocess execution parameters are sanitized before passing to the command.
+import subprocess  # nosec B404
 import textwrap
 import os
 import sys
@@ -26,10 +27,11 @@ import glob
 import csv
 from enum import Enum
 from typing import List
+from shlex import quote
 from tabulate import tabulate
 
 # Preserve white space while printing tabular view
-tabulate.PRESERVE_WHITESPACE = True
+tabulate.PRESERVE_WHITESPACE = True  # type: ignore
 
 
 class DriftctlOutputMode(Enum):
@@ -180,8 +182,9 @@ class DriftctlOutput:
     def __eq__(self, other):
         if not isinstance(other, DriftctlOutput):
             return False
-        return self.differences == other.differences and self.missing == other.missing \
-               and self.unmanaged == other.unmanaged and self.managed == other.managed
+        return \
+            self.differences == other.differences and self.missing == other.missing \
+            and self.unmanaged == other.unmanaged and self.managed == other.managed
 
 
 class DriftctlSummary:
@@ -214,9 +217,10 @@ class DriftctlSummary:
     def __eq__(self, other):
         if not isinstance(other, DriftctlSummary):
             return False
-        return self.total_changed == other.total_changed and self.total_managed == other.total_managed and \
-               self.coverage == other.coverage and self.total_resources == other.total_resources and \
-               self.total_missing == other.total_missing and self.total_unmanaged == other.total_unmanaged
+        return \
+            self.total_changed == other.total_changed and self.total_managed == other.total_managed and \
+            self.coverage == other.coverage and self.total_resources == other.total_resources and \
+            self.total_missing == other.total_missing and self.total_unmanaged == other.total_unmanaged
 
 
 def get_driftctl_resource(resource: dict, region: str = "", account_id: str = "", source_file_name: str = "",
@@ -431,7 +435,10 @@ def get_terraform_output(dir_name: str):
 
     """
     try:
-        output = subprocess.check_output("terraform -chdir=\"" + dir_name + "\" output -json", shell=True)
+        dir_name = dir_name.replace('|', '').replace('&', '').replace(';', '').replace('$', '')
+        dir_name = quote(dir_name)
+        # Disabling bandit B602 check on below line as dir_name variable is sanitized before passing to subprocess
+        output = subprocess.check_output("terraform -chdir='" + dir_name + "' output -json", shell=True)  # nosec B602
         return json.loads(output)
     except Exception:
         print(f"WARN : Not able to get details from terraform output for directory {dir_name}", file=sys.stderr)

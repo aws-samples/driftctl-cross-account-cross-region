@@ -1,0 +1,105 @@
+{
+	"options": {
+		"deep": true,
+		"only_managed": false,
+		"only_unmanaged": false
+	},
+	"summary": {
+		"total_resources": 71,
+		"total_changed": 1,
+		"total_unmanaged": 69,
+		"total_missing": 0,
+		"total_managed": 2,
+		"total_iac_source_count": 1
+	},
+	"managed": [
+		{
+			"id": "vol-09c73cfd784349294",
+			"type": "aws_ebs_volume"
+		},
+		{
+			"id": "i-051546d9d1ed18d81",
+			"type": "aws_instance",
+			"human_readable_attributes": {
+				"Name": "driftctl-acc-a-usw1"
+			},
+			"source": {
+				"source": "tfstate://terraform/account-a/us-west-1/terraform.tfstate",
+				"namespace": "module.ec2",
+				"internal_name": "instance"
+			}
+		}
+	],
+	"unmanaged": [
+		{
+			"id": "test-id",
+			"type": "aws_iam_access_key",
+			"human_readable_attributes": {
+				"User": "driftctl"
+			}
+		},
+		{
+			"id": "arn:aws:iam::111111111111:policy/AwsSecurityNacundaXXXXXXXX",
+			"type": "aws_iam_policy"
+		}
+	],
+	"missing": null,
+	"differences": [
+		{
+			"res": {
+				"id": "i-051546d9d1ed18d81",
+				"type": "aws_instance",
+				"human_readable_attributes": {
+					"Name": "driftctl-acc-a-usw1"
+				},
+				"source": {
+					"source": "tfstate://terraform/account-a/us-west-1/terraform.tfstate",
+					"namespace": "module.ec2",
+					"internal_name": "instance"
+				}
+			},
+			"changelog": [
+				{
+					"type": "update",
+					"path": [
+						"iam_instance_profile"
+					],
+					"from": "",
+					"to": "AccountGuardian-SSMInstanceProfile-DO-NOT-DELETE",
+					"computed": false
+				},
+				{
+					"type": "update",
+					"path": [
+						"instance_state"
+					],
+					"from": "running",
+					"to": "stopping",
+					"computed": true
+				},
+				{
+					"type": "create",
+					"path": [
+						"tags",
+						"Patch Group"
+					],
+					"from": null,
+					"to": "AccountGuardian-PatchGroup-DO-NOT-DELETE",
+					"computed": false
+				}
+			]
+		}
+	],
+	"coverage": 2,
+	"alerts": {
+		"": [
+			{
+				"message": "You have diffs on computed fields, check the documentation for potential false positive drifts: https://docs.driftctl.com/limitations"
+			}
+		]
+	},
+	"provider_name": "aws",
+	"provider_version": "3.19.0",
+	"scan_duration": 15,
+	"date": "2022-06-17T09:45:04.12265+01:00"
+}
