@@ -21,4 +21,4 @@ jobs:
           pip install checkov
       - name: CheckOv checks
         run: |
-          checkov -d .
+          checkov -d . --skip-download
