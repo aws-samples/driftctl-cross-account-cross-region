@@ -1,0 +1,100 @@
+{
+	"options": {
+		"deep": true,
+		"only_managed": false,
+		"only_unmanaged": false
+	},
+	"summary": {
+		"total_resources": 4,
+		"total_changed": 1,
+		"total_unmanaged": 2,
+		"total_missing": 0,
+		"total_managed": 2,
+		"total_iac_source_count": 1
+	},
+	"managed": [
+		{
+			"id": "vol-0c9de484ebb3fbfc4",
+			"type": "aws_ebs_volume"
+		},
+		{
+			"id": "i-09039f97729659bd6",
+			"type": "aws_instance",
+			"human_readable_attributes": {
+				"Name": "driftctl-acc-a-use1"
+			},
+			"source": {
+				"source": "tfstate://terraform/account-a/us-east-1/terraform.tfstate",
+				"namespace": "module.ec2",
+				"internal_name": "instance"
+			}
+		}
+	],
+	"unmanaged": [
+		{
+			"id": "test-id",
+			"type": "aws_iam_access_key",
+			"human_readable_attributes": {
+				"User": "driftctl"
+			}
+		},
+		{
+			"id": "arn:aws:iam::111111111111:policy/AwsSecurityNacundaXXXXXXXX",
+			"type": "aws_iam_policy"
+		}
+	],
+	"missing": null,
+	"differences": [
+		{
+			"res": {
+				"id": "i-09039f97729659bd6",
+				"type": "aws_instance",
+				"human_readable_attributes": {
+					"Name": "driftctl-acc-a-use1"
+				},
+				"source": {
+					"source": "tfstate://terraform/account-a/us-east-1/terraform.tfstate",
+					"namespace": "module.ec2",
+					"internal_name": "instance"
+				}
+			},
+			"changelog": [
+				{
+					"type": "update",
+					"path": [
+						"iam_instance_profile"
+					],
+					"from": "",
+					"to": "AccountGuardian-SSMInstanceProfile-DO-NOT-DELETE",
+					"computed": false
+				},
+				{
+					"type": "create",
+					"path": [
+						"tags",
+						"DummyTag"
+					],
+					"from": null,
+					"to": "DummyValue",
+					"computed": false
+				},
+				{
+					"type": "create",
+					"path": [
+						"tags",
+						"Patch Group"
+					],
+					"from": null,
+					"to": "AccountGuardian-PatchGroup-DO-NOT-DELETE",
+					"computed": false
+				}
+			]
+		}
+	],
+	"coverage": 2,
+	"alerts": null,
+	"provider_name": "aws",
+	"provider_version": "3.19.0",
+	"scan_duration": 13,
+	"date": "2022-06-17T09:44:04.911681+01:00"
+}

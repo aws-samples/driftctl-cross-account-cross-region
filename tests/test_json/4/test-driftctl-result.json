@@ -1,0 +1,344 @@
+{ /// malforming json on purpose
+	"options": {
+		"deep": false,
+		"only_managed": false,
+		"only_unmanaged": false
+	},
+	"summary": {
+		"total_resources": 73,
+		"total_changed": 0,
+		"total_unmanaged": 71,
+		"total_missing": 2,
+		"total_managed": 0,
+		"total_iac_source_count": 1
+	},
+	"managed": null,
+	"unmanaged": [
+		{
+			"id": "test-id",
+			"type": "aws_iam_access_key",
+			"human_readable_attributes": {
+				"User": "driftctl"
+			}
+		},
+		{
+			"id": "arn:aws:iam::111111111111:policy/AwsSecurityNacundaAuditPolicy",
+			"type": "aws_iam_policy"
+		},
+		{
+			"id": "arn:aws:iam::111111111111:policy/CloudFormationRefereeService",
+			"type": "aws_iam_policy"
+		},
+		{
+			"id": "arn:aws:iam::111111111111:policy/ConfigAccessPolicy",
+			"type": "aws_iam_policy"
+		},
+		{
+			"id": "arn:aws:iam::111111111111:policy/EC2CapacityReservationService",
+			"type": "aws_iam_policy"
+		},
+		{
+			"id": "arn:aws:iam::111111111111:policy/ResourceConfigurationCollectorPolicy",
+			"type": "aws_iam_policy"
+		},
+		{
+			"id": "AWSServiceRoleForAmazonGuardDuty-arn:aws:iam::aws:policy/aws-service-role/AmazonGuardDutyServiceRolePolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AWSServiceRoleForComputeOptimizer-arn:aws:iam::aws:policy/aws-service-role/ComputeOptimizerServiceRolePolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AWSServiceRoleForThorControllerRoleInternal-arn:aws:iam::aws:policy/aws-service-role/ThorControllerPolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AWSVAPTAudit-arn:aws:iam::aws:policy/SecurityAudit",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AccountGuardian-ConfigRole-DO-NOT-DELETE-arn:aws:iam::aws:policy/service-role/AWS_ConfigRole",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AccountGuardian-PVREMaintenanceWindow-DO-NOT-DELETE-arn:aws:iam::aws:policy/service-role/AmazonSSMMaintenanceWindowRole",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AccountGuardian-SSMRole-DO-NOT-DELETE-arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AccountGuardian-ServiceRole-DO-NOT-DELETE-arn:aws:iam::aws:policy/ReadOnlyAccess",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "Admin-arn:aws:iam::aws:policy/AdministratorAccess",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AwsSecurityAudit-arn:aws:iam::aws:policy/SecurityAudit",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AwsSecurityNacundaAudit-arn:aws:iam::111111111111:policy/AwsSecurityNacundaAuditPolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "EC2CapacityReservationService-arn:aws:iam::111111111111:policy/EC2CapacityReservationService",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "InternalAuditInternal-arn:aws:iam::aws:policy/SecurityAudit",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "ThorConfigRole-arn:aws:iam::111111111111:policy/ConfigAccessPolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "ResourceConfigurationCollector-DO-NOT-DELETE-arn:aws:iam::111111111111:policy/ResourceConfigurationCollectorPolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "XenaAuditorRole-DO-NOT-DELETE-arn:aws:iam::aws:policy/SecurityAudit",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "cfn-lint-referee-plugin-DO-NOT-DELETE-arn:aws:iam::111111111111:policy/CloudFormationRefereeService",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "driftctl-arn:aws:iam::aws:policy/AmazonEC2FullAccess",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "driftctl-arn:aws:iam::aws:policy/ReadOnlyAccess",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "driftctl-cross-account-role-arn:aws:iam::aws:policy/AmazonEC2FullAccess",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "driftctl-cross-account-role-arn:aws:iam::aws:policy/AmazonS3FullAccess",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "driftctl-cross-account-role-arn:aws:iam::aws:policy/ReadOnlyAccess",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AWSVAPTAudit",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "AccessAnalyzerTrustedService",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "AccountGuardian-ConfigRole-DO-NOT-DELETE",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "AccountGuardian-EventsForward-DO-NOT-DELETE",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "AccountGuardian-PVREMaintenanceWindow-DO-NOT-DELETE",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "AccountGuardian-SSMRole-DO-NOT-DELETE",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "AccountGuardian-ServiceRole-DO-NOT-DELETE",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "Admin",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "AwsSecurityAudit",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "AwsSecurityNacundaAudit",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "EC2CapacityReservationService",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "GatedGardenAudit",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "GatedGardenInternalAudit",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "InternalAuditInternal",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "ThorAuditorRole-DO-NOT-DELETE",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "ThorCloudTrailRole",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "ThorConfigRole",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "ThorRole-DO-NOT-DELETE",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "ThorRoleForOptInComputeOptimizer",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "OrthancRole",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "ResourceConfigurationCollector-DO-NOT-DELETE",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "ShadowTrooperRole",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "XenaAuditorRole-DO-NOT-DELETE",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "cfn-lint-referee-plugin-DO-NOT-DELETE",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "driftctl-cross-account-role",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "AccessAnalyzerTrustedService:AccessAnalyzerTrustedServicePolicy",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "AccountGuardian-ConfigRole-DO-NOT-DELETE:PVREPolicy",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "AccountGuardian-EventsForward-DO-NOT-DELETE:ForwardPolicy",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "AccountGuardian-PVREMaintenanceWindow-DO-NOT-DELETE:SSMPassRole",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "AccountGuardian-ServiceRole-DO-NOT-DELETE:Config",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "GatedGardenAudit:GatedGardenPolicy",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "GatedGardenInternalAudit:GatedGardenInternalAuditPolicy",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "ThorAuditorRole-DO-NOT-DELETE:ThorAuditorPolicy",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "ThorCloudTrailRole:AWSCloudTrailAccessPolicy",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "ThorRole-DO-NOT-DELETE:ThorControllerPolicy",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "ThorRoleForOptInComputeOptimizer:AWSComputeOptimizerAccessPolicy",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "OrthancRole:OrthancPolicy-prod",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "ShadowTrooperRole:ShadowTrooperPolicy-prod",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "driftctl",
+			"type": "aws_iam_user"
+		},
+		{
+			"id": "nacl-2205932412",
+			"type": "aws_network_acl_rule",
+			"human_readable_attributes": {
+				"CIDR": "0.0.0.0/0",
+				"Egress": "false",
+				"Network": "acl-0eb0c05e553b3f7a2",
+				"Protocol": "All",
+				"Rule number": "100"
+			}
+		},
+		{
+			"id": "nacl-2821929896",
+			"type": "aws_network_acl_rule",
+			"human_readable_attributes": {
+				"CIDR": "0.0.0.0/0",
+				"Egress": "true",
+				"Network": "acl-0eb0c05e553b3f7a2",
+				"Protocol": "All",
+				"Rule number": "100"
+			}
+		},
+		{
+			"id": "do-not-delete-gatedgarden-audit-111111111111",
+			"type": "aws_s3_bucket"
+		},
+		{
+			"id": "do-not-delete-gatedgarden-audit-111111111111",
+			"type": "aws_s3_bucket_policy"
+		}
+	],
+	"missing": [
+		{
+			"id": "vol-00f9a4afb9ba2b270",
+			"type": "aws_ebs_volume"
+		},
+		{
+			"id": "i-006e0740ea6379862",
+			"type": "aws_instance",
+			"human_readable_attributes": {
+				"Name": "driftctl-acc-b-usw2"
+			},
+			"source": {
+				"source": "tfstate://terraform/account-b/us-west-2/terraform.tfstate",
+				"namespace": "module.ec2",
+				"internal_name": "instance"
+			}
+		}
+	],
+	"differences": null,
+	"coverage": 0,
+	"alerts": null,
+	"provider_name": "aws",
+	"provider_version": "3.19.0",
+	"scan_duration": 5,
+	"date": "2022-06-17T09:46:23.606786+01:00"
+}

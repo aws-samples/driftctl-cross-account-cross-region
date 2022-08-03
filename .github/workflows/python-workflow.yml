@@ -1,0 +1,70 @@
+name: python-checks
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 mypy pylint
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Lint with mypy
+        run: |
+          # Lint with mypy
+          python3 -m mypy .
+      - name: Lint with flake8
+        run: |
+          # Flake8 Linting
+          flake8 . --max-line-length=150 --statistics --count
+      - name: Lint with pylint
+        run: |
+          pylint . --recursive true --max-line-length=150 --fail-under 9.9  --max-branches 20 --max-locals 20 --max-statements 55
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit
+          if [ -f requirements.txt]; then pip install -r requirements.txt;fi
+      - name: Bandit checks
+        run: |
+          bandit . -r
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+         python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest coverage
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: PyTest
+        run: |
+          coverage erase || echo "Ignore coverage erase failure"
+          coverage run -m pytest  --junitxml=pytest.xml
+          coverage xml
+          coverage report --fail-under 90
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v2
