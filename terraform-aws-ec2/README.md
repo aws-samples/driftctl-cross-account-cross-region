@@ -42,3 +42,7 @@ No modules.
 | <a name="output_resource_region"></a> [resource\_region](#output\_resource\_region) | AWS Region name for Amazon EC2 instance. |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | Default Amazon VPC Id. |
 <!-- END_TF_DOCS -->
+
+
+####Disclaimer
+This module should not be used for deploying resource in production environment, as this module was created for demo purpose only.

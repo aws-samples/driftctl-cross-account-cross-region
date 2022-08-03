@@ -36,6 +36,8 @@ data "aws_ami" "amazon_linux_ami" {
 }
 
 resource "aws_instance" "instance" {
+  #checkov:skip=CKV_AWS_126:Detailed monitoring not required as resource created is for demo purpose
+  #checkov:skip=CKV_AWS_135:Optimized EBS not required as resource created is for demo purpose
   ami           = data.aws_ami.amazon_linux_ami.id
   instance_type = "t2.micro"
   subnet_id     = data.aws_subnets.default_vpc_subnets.ids[0]
