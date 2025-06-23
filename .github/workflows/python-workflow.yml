@@ -67,4 +67,4 @@ jobs:
           coverage xml
           coverage report --fail-under 90
       - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
