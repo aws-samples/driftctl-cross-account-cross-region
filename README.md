@@ -64,6 +64,16 @@ Driftctl is a utility to detect drifts for the resources managed by Terraform as
     ```
 
 ## Driftctl
+### Dependency Management
+This project uses two requirements files:
+- `requirements.txt`: Contains flexible version constraints for development
+- `requirements-lock.txt`: Contains exact pinned versions for reproducible builds
+
+GitHub Dependabot is configured to automatically create pull requests for dependency updates. When dependencies are updated:
+1. Dependabot will update `requirements.txt` with new version constraints
+2. Run `./update-requirements-lock.sh` to regenerate `requirements-lock.txt` with exact versions
+3. Commit both files together
+
 ### Setup
 - Install latest version of Driftctl following steps mentioned [here](https://docs.driftctl.com/installation/) and check if the installation is successful using below command.
   ```shell
@@ -80,7 +90,10 @@ Driftctl is a utility to detect drifts for the resources managed by Terraform as
   ```shell
   python3 -m venv .env
   source .env/bin/activate
-  pip install -r requirements.txt
+  # Install exact versions from lock file for reproducible builds
+  pip install -r requirements-lock.txt
+  # Or install with flexible versions for development
+  # pip install -r requirements.txt
   ```
 ### Initialize and apply terraform config and run driftctl to detect drifts
 - Run below commands to initialize terraform configuration and apply the configuration in respective account and region.
@@ -266,7 +279,7 @@ Following similar steps used during initialization lets run driftcl scan to dete
   terraform -chdir=terraform/account-b/eu-west-1 destroy --auto-approve
   terraform -chdir=terraform/account-b/us-west-2 destroy --auto-approve
   aws ec2 delete-security-group --group-name "driftctl-demo-sg" --profile driftctl-acc-b-euw1
-  pip3 uninstall -r requirements.txt -y
+  pip3 uninstall -r requirements-lock.txt -y
   deactivate
   rm -r .env/
   ```
