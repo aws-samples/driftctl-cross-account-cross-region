@@ -1,4 +1,4 @@
 pip~=23.3
-setuptools~=70.0.0
+setuptools~=78.1.1
 tabulate~=0.8.9
 types-tabulate~=0.8.9
