@@ -1,4 +1,6 @@
 name: python-checks
+permissions:
+  contents: read
 on:
   push:
     branches:
