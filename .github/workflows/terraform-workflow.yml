@@ -1,4 +1,6 @@
 name: terraform-checks
+permissions:
+  contents: read
 on:
   push:
     branches:
